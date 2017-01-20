@@ -124,12 +124,14 @@ inquirer.prompt(options).then(function (answer) {
                 });
                 break;
             case "do-what-it-says":
+                //setTiemout zero to guarantee asynch
                 setTimeout(fs.readFile('random.txt', 'utf8', function (err, data) {
                     if (err) throw err;
                     data = data.split(",");
                     whatToDo = data[0];
                     whatToFind = data[1];
-                    
+
+                    //call main with the parameters read from random.txt
                     main();
 
                 }) //readfile 
