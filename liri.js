@@ -132,7 +132,7 @@ function main() {
 
 main()
 
-if (whatToDo != "do-what-it-says") {
+if (whatToDo === "do-what-it-says") {
 
     fs.readFileSync('random.txt', 'utf8', function (err, data) {
         if (err) throw err;
