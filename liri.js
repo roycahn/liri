@@ -43,17 +43,18 @@ var options = [
     }
 ];
 
-function main() {
-    inquirer.prompt(options).then(function (answer) {
-
-        whatToDo = answer["action"];
-        whatToFind = JSON.stringify(answer["query"])
 
 
+inquirer.prompt(options).then(function (answer) {
+
+    whatToDo = answer["action"];
+    whatToFind = JSON.stringify(answer["query"])
 
 
-        var twitterParams = { q: whatToFind };
 
+
+    var twitterParams = { q: whatToFind };
+    function main() {
         switch (whatToDo) {
             case "my-tweets":
                 client.get('search/tweets', twitterParams, function (error, tweets, response) {
@@ -61,7 +62,7 @@ function main() {
                         var i = 0;
 
                         while ((typeof tweets.statuses[i]) != 'undefined') {
-                            console.log("On: " + tweets.statuses[i].created_at + "\nthe tweet was: " + wordwrap.wrap(tweets.statuses[i].text, { width: 60 }) + "\n"  );
+                            console.log("On: " + tweets.statuses[i].created_at + "\nthe tweet was: " + wordwrap.wrap(tweets.statuses[i].text, { width: 60 }) + "\n");
                             i++;
                         }
                     }
@@ -122,29 +123,27 @@ function main() {
                     }
                 });
                 break;
+            case "do-what-it-says":
+                setTimeout(fs.readFile('random.txt', 'utf8', function (err, data) {
+                    if (err) throw err;
+                    data = data.split(",");
+                    whatToDo = data[0];
+                    whatToFind = data[1];
+                    
+                    main();
 
+                }) //readfile 
+                    , 0)//setTimeout
         } //switch
 
-    });//inquirer.prompt
+    } //main
+    main()
+});//inquirer.prompt
 
 
-} //main
-
-main()
-
-if (whatToDo === "do-what-it-says") {
-
-    fs.readFileSync('random.txt', 'utf8', function (err, data) {
-        if (err) throw err;
-        data = data.split(",");
-        whatToDo = data[0];
-        whatToFind = data[1];
-        console.log("From do what is says: " + whatToDo);
-        console.log("From do what is says: " + whatToFind);
 
 
-    }) //readfile      
 
-}//while
+
 
 
